@@ -1,0 +1,9 @@
+assets/models/
+android/
+ios/
+windows/
+linux/
+macos/
+lib/
+test/
+*.gguf
