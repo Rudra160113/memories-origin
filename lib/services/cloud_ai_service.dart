@@ -1,7 +1,10 @@
 import 'dart:convert';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/memories_data.dart';
+import 'connector_service.dart';
+import 'llama_native_service.dart';
 
 class CloudAiService {
   static Future<String> generateResponse({
@@ -13,12 +16,27 @@ class CloudAiService {
   }) async {
     final systemContext = StringBuffer();
     systemContext.writeln('You are Ai⁺, a warm, intelligent personal companion and diary assistant created by Origin.');
+    systemContext.writeln('Answer all general knowledge questions directly using your extensive general intelligence (physics, science, history, coding, philosophy, literature, wellness).');
+
     if (noteContent.trim().isNotEmpty) {
-      systemContext.writeln('Active User Note Title: "$noteTitle"');
+      systemContext.writeln('\nActive User Note Title: "$noteTitle"');
       systemContext.writeln('Active User Note Content:\n"$noteContent"');
     }
 
-    // 1. Google Gemini API Key (Support latest free tier models: gemini-2.5-flash, gemini-2.0-flash, gemini-1.5-flash)
+    final lowerPrompt = prompt.toLowerCase();
+    final isConnectorQuery = lowerPrompt.contains('connector') ||
+        lowerPrompt.contains('weather') ||
+        lowerPrompt.contains('quote') ||
+        lowerPrompt.contains('news');
+
+    if (isConnectorQuery && connectors != null && connectors.isNotEmpty) {
+      final connectorData = await ConnectorService.fetchActiveConnectorContext(connectors);
+      if (connectorData.isNotEmpty) {
+        systemContext.writeln(connectorData);
+      }
+    }
+
+    // 1. Google Gemini API Key
     if (settings.geminiApiKey.trim().isNotEmpty) {
       final apiKey = settings.geminiApiKey.trim();
       final geminiModels = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash'];
@@ -56,10 +74,8 @@ class CloudAiService {
               }
             }
           } else if (response.statusCode == 404) {
-            // Model not found on this endpoint, try next model in fallback list
             continue;
           } else {
-            // Fallback request format without system_instruction if older format required
             final fallbackUrl = Uri.parse('https://generativelanguage.googleapis.com/v1beta/models/$modelName:generateContent?key=$apiKey');
             final fbResponse = await http.post(
               fallbackUrl,
@@ -163,7 +179,7 @@ class CloudAiService {
       }
     }
 
-    // 4. OpenRouter API Key (Free tier models)
+    // 4. OpenRouter API Key
     if (settings.openRouterApiKey.trim().isNotEmpty) {
       try {
         final apiKey = settings.openRouterApiKey.trim();
@@ -217,7 +233,20 @@ class CloudAiService {
       } catch (_) {}
     }
 
-    // 6. Zero API Key Mode: Query Live Connectors
+    // 6. Native On-Device GGUF Inference Engine (Unconstrained General Reasoning)
+    if (!kIsWeb) {
+      final ggufResponse = await LlamaNativeService.runLocalInference(
+        prompt: prompt,
+        noteTitle: noteTitle,
+        noteContent: noteContent,
+        connectors: connectors,
+      );
+      if (ggufResponse != null) {
+        return ggufResponse;
+      }
+    }
+
+    // 7. Web Zero API Key Mode Fallback
     try {
       final zenRes = await http.get(Uri.parse('https://zenquotes.io/api/random')).timeout(const Duration(seconds: 4));
       if (zenRes.statusCode == 200) {
@@ -225,7 +254,7 @@ class CloudAiService {
         if (quoteData is List && quoteData.isNotEmpty) {
           final quote = quoteData[0]['q'];
           final author = quoteData[0]['a'];
-          return '💡 Live Companion Reflection (Zero API Key Mode):\n\n"$quote"\n— $author\n\n*(Note: Paste a Google Gemini or OpenAI API key in Settings ➔ Cloud APIs to enable deep generative chat!)*';
+          return '💡 Live Companion Reflection:\n\n"$quote"\n— $author\n\n*(Note: Add a Google Gemini or OpenAI API key in Settings ➔ Cloud APIs for custom generative chat on web!)*';
         }
       }
     } catch (_) {}
