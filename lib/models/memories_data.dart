@@ -89,7 +89,7 @@ class MemoryEntry {
       );
 }
 
-enum ConnectorCategory { wellBeing, academics, research, shopping }
+enum ConnectorCategory { wellBeing, academics, research, shopping, encyclopedia }
 
 class AiConnector {
   final String id;
@@ -115,6 +115,116 @@ class AiConnector {
 
 class PreconfiguredConnectors {
   static List<AiConnector> get defaultList => [
+        // --- 📖 Encyclopedias & Wiki Knowledge Engines ---
+        // 🇮🇳 India & Regional Indic Knowledge (18 Endpoints)
+        AiConnector(id: 'enc_in_1', name: 'Hindi Wikipedia 🇮🇳', category: ConnectorCategory.encyclopedia, url: 'https://hi.wikipedia.org/w/api.php', jsonPath: 'query.search', region: 'India'),
+        AiConnector(id: 'enc_in_2', name: 'Bengali Wikipedia 🇮🇳', category: ConnectorCategory.encyclopedia, url: 'https://bn.wikipedia.org/w/api.php', jsonPath: 'query.search', region: 'India'),
+        AiConnector(id: 'enc_in_3', name: 'Marathi Wikipedia 🇮🇳', category: ConnectorCategory.encyclopedia, url: 'https://mr.wikipedia.org/w/api.php', jsonPath: 'query.search', region: 'India'),
+        AiConnector(id: 'enc_in_4', name: 'Tamil Wikipedia 🇮🇳', category: ConnectorCategory.encyclopedia, url: 'https://ta.wikipedia.org/w/api.php', jsonPath: 'query.search', region: 'India'),
+        AiConnector(id: 'enc_in_5', name: 'Telugu Wikipedia 🇮🇳', category: ConnectorCategory.encyclopedia, url: 'https://te.wikipedia.org/w/api.php', jsonPath: 'query.search', region: 'India'),
+        AiConnector(id: 'enc_in_6', name: 'Gujarati Wikipedia 🇮🇳', category: ConnectorCategory.encyclopedia, url: 'https://gu.wikipedia.org/w/api.php', jsonPath: 'query.search', region: 'India'),
+        AiConnector(id: 'enc_in_7', name: 'Malayalam Wikipedia 🇮🇳', category: ConnectorCategory.encyclopedia, url: 'https://ml.wikipedia.org/w/api.php', jsonPath: 'query.search', region: 'India'),
+        AiConnector(id: 'enc_in_8', name: 'Kannada Wikipedia 🇮🇳', category: ConnectorCategory.encyclopedia, url: 'https://kn.wikipedia.org/w/api.php', jsonPath: 'query.search', region: 'India'),
+        AiConnector(id: 'enc_in_9', name: 'Punjabi Wikipedia 🇮🇳', category: ConnectorCategory.encyclopedia, url: 'https://pa.wikipedia.org/w/api.php', jsonPath: 'query.search', region: 'India'),
+        AiConnector(id: 'enc_in_10', name: 'Odia Wikipedia 🇮🇳', category: ConnectorCategory.encyclopedia, url: 'https://or.wikipedia.org/w/api.php', jsonPath: 'query.search', region: 'India'),
+        AiConnector(id: 'enc_in_11', name: 'Assamese Wikipedia 🇮🇳', category: ConnectorCategory.encyclopedia, url: 'https://as.wikipedia.org/w/api.php', jsonPath: 'query.search', region: 'India'),
+        AiConnector(id: 'enc_in_12', name: 'Sanskrit Wikipedia 🇮🇳', category: ConnectorCategory.encyclopedia, url: 'https://sa.wikipedia.org/w/api.php', jsonPath: 'query.search', region: 'India'),
+        AiConnector(id: 'enc_in_13', name: 'Urdu Wikipedia 🇮🇳', category: ConnectorCategory.encyclopedia, url: 'https://ur.wikipedia.org/w/api.php', jsonPath: 'query.search', region: 'India'),
+        AiConnector(id: 'enc_in_14', name: 'Bhojpuri Wikipedia 🇮🇳', category: ConnectorCategory.encyclopedia, url: 'https://bh.wikipedia.org/w/api.php', jsonPath: 'query.search', region: 'India'),
+        AiConnector(id: 'enc_in_15', name: 'Maithili Wikipedia 🇮🇳', category: ConnectorCategory.encyclopedia, url: 'https://mai.wikipedia.org/w/api.php', jsonPath: 'query.search', region: 'India'),
+        AiConnector(id: 'enc_in_16', name: 'Santali Wikipedia 🇮🇳', category: ConnectorCategory.encyclopedia, url: 'https://sat.wikipedia.org/w/api.php', jsonPath: 'query.search', region: 'India'),
+        AiConnector(id: 'enc_in_17', name: 'India Water Portal Wiki 🇮🇳', category: ConnectorCategory.encyclopedia, url: 'https://indiawaterportal.org/w/api.php', jsonPath: 'query.search', region: 'India'),
+        AiConnector(id: 'enc_in_18', name: 'Bharatpedia Encyclopedia 🇮🇳', category: ConnectorCategory.encyclopedia, url: 'https://bharatpedia.org/w/api.php', jsonPath: 'query.search', region: 'India'),
+
+        // 🌍 General Knowledge, Science & Archives (25 Endpoints)
+        AiConnector(id: 'enc_gl_1', name: 'English Wikipedia 🌐', category: ConnectorCategory.encyclopedia, url: 'https://en.wikipedia.org/w/api.php', jsonPath: 'query.search', region: 'Global'),
+        AiConnector(id: 'enc_gl_2', name: 'Simple English Wikipedia 🌐', category: ConnectorCategory.encyclopedia, url: 'https://simple.wikipedia.org/w/api.php', jsonPath: 'query.search', region: 'Global'),
+        AiConnector(id: 'enc_gl_3', name: 'Wikidata Knowledge Graph 🌐', category: ConnectorCategory.encyclopedia, url: 'https://www.wikidata.org/w/api.php', jsonPath: 'search', region: 'Global'),
+        AiConnector(id: 'enc_gl_4', name: 'Wikiquote 🌐', category: ConnectorCategory.encyclopedia, url: 'https://en.wikiquote.org/w/api.php', jsonPath: 'query.search', region: 'Global'),
+        AiConnector(id: 'enc_gl_5', name: 'Wiktionary Etymology 🌐', category: ConnectorCategory.encyclopedia, url: 'https://en.wiktionary.org/w/api.php', jsonPath: 'query.search', region: 'Global'),
+        AiConnector(id: 'enc_gl_6', name: 'Wikisource Literature 🌐', category: ConnectorCategory.encyclopedia, url: 'https://en.wikisource.org/w/api.php', jsonPath: 'query.search', region: 'Global'),
+        AiConnector(id: 'enc_gl_7', name: 'Wikivoyage Geography 🌐', category: ConnectorCategory.encyclopedia, url: 'https://en.wikivoyage.org/w/api.php', jsonPath: 'query.search', region: 'Global'),
+        AiConnector(id: 'enc_gl_8', name: 'Wikispecies Biology 🌐', category: ConnectorCategory.encyclopedia, url: 'https://species.wikimedia.org/w/api.php', jsonPath: 'query.search', region: 'Global'),
+        AiConnector(id: 'enc_gl_9', name: 'Wikimedia Commons 🌐', category: ConnectorCategory.encyclopedia, url: 'https://commons.wikimedia.org/w/api.php', jsonPath: 'query.search', region: 'Global'),
+        AiConnector(id: 'enc_gl_10', name: 'Citizendium Peer-Reviewed 🌐', category: ConnectorCategory.encyclopedia, url: 'https://citizendium.org/w/api.php', jsonPath: 'query.search', region: 'Global'),
+        AiConnector(id: 'enc_gl_11', name: 'Scholarpedia Science 🌐', category: ConnectorCategory.encyclopedia, url: 'http://scholarpedia.org/w/api.php', jsonPath: 'query.search', region: 'Global'),
+        AiConnector(id: 'enc_gl_12', name: 'Encyclopedia of Mathematics 📐', category: ConnectorCategory.encyclopedia, url: 'https://encyclopediaofmath.org/api/rest_v1/page/summary/Calculus', jsonPath: 'extract', region: 'Global'),
+        AiConnector(id: 'enc_gl_13', name: 'Stanford Encyclopedia of Philosophy (SEP) 🧠', category: ConnectorCategory.encyclopedia, url: 'https://plato.stanford.edu/search/searcher.py?query=ethics', jsonPath: 'extract', region: 'Global'),
+        AiConnector(id: 'enc_gl_14', name: 'Internet Encyclopedia of Philosophy (IEP) 🧠', category: ConnectorCategory.encyclopedia, url: 'https://iep.utm.edu/w/api.php', jsonPath: 'query.search', region: 'Global'),
+        AiConnector(id: 'enc_gl_15', name: 'Appropedia Sustainability 🌿', category: ConnectorCategory.encyclopedia, url: 'https://www.appropedia.org/w/api.php', jsonPath: 'query.search', region: 'Global'),
+        AiConnector(id: 'enc_gl_16', name: 'Encyclopedia of Life (EOL) 🦋', category: ConnectorCategory.encyclopedia, url: 'https://eol.org/api/search/1.0.json?q=panthera', jsonPath: 'results', region: 'Global'),
+        AiConnector(id: 'enc_gl_17', name: 'Open Library Books Encyclopedia 📚', category: ConnectorCategory.encyclopedia, url: 'https://openlibrary.org/search.json?q=physics', jsonPath: 'docs.title', region: 'Global'),
+        AiConnector(id: 'enc_gl_18', name: 'Library of Congress 🏛️', category: ConnectorCategory.encyclopedia, url: 'https://www.loc.gov/search/?fo=json&q=history', jsonPath: 'results.title', region: 'Global'),
+        AiConnector(id: 'enc_gl_19', name: 'Europeana Open Knowledge 🇪🇺', category: ConnectorCategory.encyclopedia, url: 'https://api.europeana.eu/record/v2/opensearch.json?query=art', jsonPath: 'items', region: 'Global'),
+        AiConnector(id: 'enc_gl_20', name: 'PhilPapers Philosophy 🧠', category: ConnectorCategory.encyclopedia, url: 'https://philpapers.org/w/api.php', jsonPath: 'query.search', region: 'Global'),
+        AiConnector(id: 'enc_gl_21', name: 'Everipedia / IQ.wiki 🌐', category: ConnectorCategory.encyclopedia, url: 'https://iq.wiki/w/api.php', jsonPath: 'query.search', region: 'Global'),
+        AiConnector(id: 'enc_gl_22', name: 'Ballotpedia Politics 🏛️', category: ConnectorCategory.encyclopedia, url: 'https://ballotpedia.org/w/api.php', jsonPath: 'query.search', region: 'Global'),
+        AiConnector(id: 'enc_gl_23', name: 'GovTrack US Legislation 🏛️', category: ConnectorCategory.encyclopedia, url: 'https://www.govtrack.us/api/v2/bill?limit=5', jsonPath: 'objects.title', region: 'Global'),
+        AiConnector(id: 'enc_gl_24', name: 'Wikiversity Open Learning 🎓', category: ConnectorCategory.encyclopedia, url: 'https://en.wikiversity.org/w/api.php', jsonPath: 'query.search', region: 'Global'),
+
+        // 🎮 Gaming, Software & Pop-Culture Fandom Wikis (35 Endpoints)
+        AiConnector(id: 'enc_gm_1', name: 'Minecraft Wiki ⛏️', category: ConnectorCategory.encyclopedia, url: 'https://minecraft.wiki/w/api.php', jsonPath: 'query.search', region: 'Gaming'),
+        AiConnector(id: 'enc_gm_2', name: 'Wookieepedia (Star Wars) 🚀', category: ConnectorCategory.encyclopedia, url: 'https://starwars.fandom.com/api.php', jsonPath: 'query.search', region: 'Gaming'),
+        AiConnector(id: 'enc_gm_3', name: 'Memory Alpha (Star Trek) 🖖', category: ConnectorCategory.encyclopedia, url: 'https://memory-alpha.fandom.com/api.php', jsonPath: 'query.search', region: 'Gaming'),
+        AiConnector(id: 'enc_gm_4', name: 'Bulbapedia (Pokémon) ⚡', category: ConnectorCategory.encyclopedia, url: 'https://bulbapedia.bulbagarden.net/w/api.php', jsonPath: 'query.search', region: 'Gaming'),
+        AiConnector(id: 'enc_gm_5', name: 'Tardis Core (Doctor Who) ⏳', category: ConnectorCategory.encyclopedia, url: 'https://tardis.fandom.com/api.php', jsonPath: 'query.search', region: 'Gaming'),
+        AiConnector(id: 'enc_gm_6', name: 'Marvel Database 🦸', category: ConnectorCategory.encyclopedia, url: 'https://marvel.fandom.com/api.php', jsonPath: 'query.search', region: 'Gaming'),
+        AiConnector(id: 'enc_gm_7', name: 'DC Database 🦇', category: ConnectorCategory.encyclopedia, url: 'https://dc.fandom.com/api.php', jsonPath: 'query.search', region: 'Gaming'),
+        AiConnector(id: 'enc_gm_8', name: 'Harry Potter Wiki 🪄', category: ConnectorCategory.encyclopedia, url: 'https://harrypotter.fandom.com/api.php', jsonPath: 'query.search', region: 'Gaming'),
+        AiConnector(id: 'enc_gm_9', name: 'Tolkien Gateway (LOTR) 💍', category: ConnectorCategory.encyclopedia, url: 'https://tolkiengateway.net/w/api.php', jsonPath: 'query.search', region: 'Gaming'),
+        AiConnector(id: 'enc_gm_10', name: 'AWOIAF (Game of Thrones) ⚔️', category: ConnectorCategory.encyclopedia, url: 'https://awoiaf.westeros.org/api.php', jsonPath: 'query.search', region: 'Gaming'),
+        AiConnector(id: 'enc_gm_11', name: 'Elder Scrolls Wiki (UESP) 🗡️', category: ConnectorCategory.encyclopedia, url: 'https://en.uesp.net/w/api.php', jsonPath: 'query.search', region: 'Gaming'),
+        AiConnector(id: 'enc_gm_12', name: 'Fallout Wiki (Nukapedia) ☢️', category: ConnectorCategory.encyclopedia, url: 'https://fallout.fandom.com/api.php', jsonPath: 'query.search', region: 'Gaming'),
+        AiConnector(id: 'enc_gm_13', name: 'Witcher Wiki 🐺', category: ConnectorCategory.encyclopedia, url: 'https://witcher.fandom.com/api.php', jsonPath: 'query.search', region: 'Gaming'),
+        AiConnector(id: 'enc_gm_14', name: 'Genshin Impact Wiki 🌠', category: ConnectorCategory.encyclopedia, url: 'https://genshin-impact.fandom.com/api.php', jsonPath: 'query.search', region: 'Gaming'),
+        AiConnector(id: 'enc_gm_15', name: 'GTA Wiki 🚗', category: ConnectorCategory.encyclopedia, url: 'https://gta.fandom.com/api.php', jsonPath: 'query.search', region: 'Gaming'),
+        AiConnector(id: 'enc_gm_16', name: 'Final Fantasy Wiki 🗡️', category: ConnectorCategory.encyclopedia, url: 'https://finalfantasy.fandom.com/api.php', jsonPath: 'query.search', region: 'Gaming'),
+        AiConnector(id: 'enc_gm_17', name: 'Dark Souls Wiki ⚔️', category: ConnectorCategory.encyclopedia, url: 'https://darksouls.fandom.com/api.php', jsonPath: 'query.search', region: 'Gaming'),
+        AiConnector(id: 'enc_gm_18', name: 'Elden Ring Wiki 💍', category: ConnectorCategory.encyclopedia, url: 'https://eldenring.fandom.com/api.php', jsonPath: 'query.search', region: 'Gaming'),
+        AiConnector(id: 'enc_gm_19', name: 'Zelda Wiki 🛡️', category: ConnectorCategory.encyclopedia, url: 'https://zeldawiki.wiki/w/api.php', jsonPath: 'query.search', region: 'Gaming'),
+        AiConnector(id: 'enc_gm_20', name: 'Runescape Wiki ⚔️', category: ConnectorCategory.encyclopedia, url: 'https://runescape.wiki/w/api.php', jsonPath: 'query.search', region: 'Gaming'),
+        AiConnector(id: 'enc_gm_21', name: 'Old School Runescape Wiki 🗡️', category: ConnectorCategory.encyclopedia, url: 'https://oldschool.runescape.wiki/w/api.php', jsonPath: 'query.search', region: 'Gaming'),
+        AiConnector(id: 'enc_gm_22', name: 'Warhammer 40k Lexicanum 🛡️', category: ConnectorCategory.encyclopedia, url: 'https://wh40k.lexicanum.com/w/api.php', jsonPath: 'query.search', region: 'Gaming'),
+        AiConnector(id: 'enc_gm_23', name: 'D&D 5e Wiki 🎲', category: ConnectorCategory.encyclopedia, url: 'https://dnd5e.wikidot.com/w/api.php', jsonPath: 'query.search', region: 'Gaming'),
+        AiConnector(id: 'enc_gm_24', name: 'Pathfinder Wiki 🎲', category: ConnectorCategory.encyclopedia, url: 'https://pathfinderwiki.com/w/api.php', jsonPath: 'query.search', region: 'Gaming'),
+        AiConnector(id: 'enc_gm_25', name: 'Arch Linux Technical Wiki 💻', category: ConnectorCategory.encyclopedia, url: 'https://wiki.archlinux.org/w/api.php', jsonPath: 'query.search', region: 'Technical'),
+        AiConnector(id: 'enc_gm_26', name: 'Gentoo Linux Wiki 💻', category: ConnectorCategory.encyclopedia, url: 'https://wiki.gentoo.org/w/api.php', jsonPath: 'query.search', region: 'Technical'),
+        AiConnector(id: 'enc_gm_27', name: 'Debian Linux Wiki 💻', category: ConnectorCategory.encyclopedia, url: 'https://wiki.debian.org/w/api.php', jsonPath: 'query.search', region: 'Technical'),
+        AiConnector(id: 'enc_gm_28', name: 'Ubuntu Community Wiki 💻', category: ConnectorCategory.encyclopedia, url: 'https://help.ubuntu.com/w/api.php', jsonPath: 'query.search', region: 'Technical'),
+        AiConnector(id: 'enc_gm_29', name: 'NixOS Linux Wiki 💻', category: ConnectorCategory.encyclopedia, url: 'https://wiki.nixos.org/w/api.php', jsonPath: 'query.search', region: 'Technical'),
+        AiConnector(id: 'enc_gm_30', name: 'Doom Wiki 💥', category: ConnectorCategory.encyclopedia, url: 'https://doomwiki.org/w/api.php', jsonPath: 'query.search', region: 'Gaming'),
+        AiConnector(id: 'enc_gm_31', name: 'Terraria Wiki 🌳', category: ConnectorCategory.encyclopedia, url: 'https://terraria.wiki.gg/w/api.php', jsonPath: 'query.search', region: 'Gaming'),
+        AiConnector(id: 'enc_gm_32', name: 'Warframe Wiki 🤖', category: ConnectorCategory.encyclopedia, url: 'https://warframe.fandom.com/api.php', jsonPath: 'query.search', region: 'Gaming'),
+        AiConnector(id: 'enc_gm_33', name: 'Cyberpunk 2077 Wiki 🌆', category: ConnectorCategory.encyclopedia, url: 'https://cyberpunk.fandom.com/api.php', jsonPath: 'query.search', region: 'Gaming'),
+        AiConnector(id: 'enc_gm_34', name: 'League of Legends Wiki ⚔️', category: ConnectorCategory.encyclopedia, url: 'https://leagueoflegends.fandom.com/api.php', jsonPath: 'query.search', region: 'Gaming'),
+        AiConnector(id: 'enc_gm_35', name: 'Destiny Pedia 🚀', category: ConnectorCategory.encyclopedia, url: 'https://destinypedia.com/w/api.php', jsonPath: 'query.search', region: 'Gaming'),
+
+        // ⛩️ Anime, Manga & Pop Fiction Encyclopedias (15 Endpoints)
+        AiConnector(id: 'enc_an_1', name: 'Jujutsu Kaisen Wiki ⛩️', category: ConnectorCategory.encyclopedia, url: 'https://jujutsu-kaisen.fandom.com/api.php', jsonPath: 'query.search', region: 'Anime'),
+        AiConnector(id: 'enc_an_2', name: 'One Piece Wiki 🏴‍☠️', category: ConnectorCategory.encyclopedia, url: 'https://onepiece.fandom.com/api.php', jsonPath: 'query.search', region: 'Anime'),
+        AiConnector(id: 'enc_an_3', name: 'Naruto Wiki 🍃', category: ConnectorCategory.encyclopedia, url: 'https://naruto.fandom.com/api.php', jsonPath: 'query.search', region: 'Anime'),
+        AiConnector(id: 'enc_an_4', name: 'Bleach Wiki ⚔️', category: ConnectorCategory.encyclopedia, url: 'https://bleach.fandom.com/api.php', jsonPath: 'query.search', region: 'Anime'),
+        AiConnector(id: 'enc_an_5', name: 'Dragon Ball Wiki 🐉', category: ConnectorCategory.encyclopedia, url: 'https://dragonball.fandom.com/api.php', jsonPath: 'query.search', region: 'Anime'),
+        AiConnector(id: 'enc_an_6', name: 'Attack on Titan Wiki 🗡️', category: ConnectorCategory.encyclopedia, url: 'https://attackontitan.fandom.com/api.php', jsonPath: 'query.search', region: 'Anime'),
+        AiConnector(id: 'enc_an_7', name: 'My Hero Academia Wiki 💥', category: ConnectorCategory.encyclopedia, url: 'https://myheroacademia.fandom.com/api.php', jsonPath: 'query.search', region: 'Anime'),
+        AiConnector(id: 'enc_an_8', name: 'Demon Slayer Wiki ⚔️', category: ConnectorCategory.encyclopedia, url: 'https://kimetsu-no-yaiba.fandom.com/api.php', jsonPath: 'query.search', region: 'Anime'),
+        AiConnector(id: 'enc_an_9', name: 'Eminence in Shadow Wiki 🌙', category: ConnectorCategory.encyclopedia, url: 'https://the-eminence-in-shadow.fandom.com/api.php', jsonPath: 'query.search', region: 'Anime'),
+        AiConnector(id: 'enc_an_10', name: 'Chainsaw Man Wiki 🪚', category: ConnectorCategory.encyclopedia, url: 'https://chainsaw-man.fandom.com/api.php', jsonPath: 'query.search', region: 'Anime'),
+        AiConnector(id: 'enc_an_11', name: 'JoJo Bizarre Encyclopedia 🌟', category: ConnectorCategory.encyclopedia, url: 'https://jojowiki.com/w/api.php', jsonPath: 'query.search', region: 'Anime'),
+        AiConnector(id: 'enc_an_12', name: 'Type-Moon (Fate/stay) Wiki 🗡️', category: ConnectorCategory.encyclopedia, url: 'https://typemoon.fandom.com/api.php', jsonPath: 'query.search', region: 'Anime'),
+        AiConnector(id: 'enc_an_13', name: 'Sword Art Online Wiki ⚔️', category: ConnectorCategory.encyclopedia, url: 'https://swordartonline.fandom.com/api.php', jsonPath: 'query.search', region: 'Anime'),
+        AiConnector(id: 'enc_an_14', name: 'Overlord Wiki 💀', category: ConnectorCategory.encyclopedia, url: 'https://overlordmaruyama.fandom.com/api.php', jsonPath: 'query.search', region: 'Anime'),
+        AiConnector(id: 'enc_an_15', name: 'Slime Tensei Wiki 🔮', category: ConnectorCategory.encyclopedia, url: 'https://tensura.fandom.com/api.php', jsonPath: 'query.search', region: 'Anime'),
+
+        // 🌐 Keyless Direct REST APIs for General Encyclopedic Lookups (7 Endpoints)
+        AiConnector(id: 'enc_rst_1', name: 'REST Countries Encyclopedia 🌍', category: ConnectorCategory.encyclopedia, url: 'https://restcountries.com/v3.1/all', jsonPath: 'name.common', region: 'Global'),
+        AiConnector(id: 'enc_rst_2', name: 'NASA Exoplanet Archive 🪐', category: ConnectorCategory.encyclopedia, url: 'https://exoplanetarchive.ipac.caltech.edu/TAP/sync?query=select+top+10+pl_name,hostname+from+ps&format=json', jsonPath: 'pl_name', region: 'Science'),
+        AiConnector(id: 'enc_rst_3', name: 'NOAA FishWatch Species 🐟', category: ConnectorCategory.encyclopedia, url: 'https://www.fishwatch.gov/api/species', jsonPath: 'Species Name', region: 'Science'),
+        AiConnector(id: 'enc_rst_4', name: 'PokeAPI Pokémon Encyclopedia ⚡', category: ConnectorCategory.encyclopedia, url: 'https://pokeapi.co/api/v2/pokemon?limit=10', jsonPath: 'results.name', region: 'Gaming'),
+        AiConnector(id: 'enc_rst_5', name: 'Frankfurter Currency History 💱', category: ConnectorCategory.encyclopedia, url: 'https://api.frankfurter.app/latest', jsonPath: 'rates', region: 'Global'),
+        AiConnector(id: 'enc_rst_6', name: 'Open Meteo Climate Database 🌤️', category: ConnectorCategory.encyclopedia, url: 'https://archive-api.open-meteo.com/v1/era5?latitude=28.61&longitude=77.20&start_date=2024-01-01&end_date=2024-01-02&daily=temperature_2m_max', jsonPath: 'daily', region: 'Science'),
+        AiConnector(id: 'enc_rst_7', name: 'CoinGecko Crypto Encyclopedia 🪙', category: ConnectorCategory.encyclopedia, url: 'https://api.coingecko.com/api/v3/coins/list?include_platform=false', jsonPath: 'name', region: 'Finance'),
+
         // --- Shopping & Brands (Shopify Public /products.json Zero-Auth APIs) ---
         // 🇮🇳 India Brands
         AiConnector(id: 'shop_in_1', name: 'BoAt Lifestyle 🇮🇳', category: ConnectorCategory.shopping, url: 'https://boat-lifestyle.com/products.json?limit=10', jsonPath: 'products', region: 'India'),

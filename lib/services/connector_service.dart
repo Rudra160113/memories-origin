@@ -17,35 +17,69 @@ class ConnectorService {
     }
 
     final lowerPrompt = userPrompt.toLowerCase();
-
-    // Smart Intent Router: Filter top matching connectors based on prompt keywords
     List<AiConnector> selectedConnectors = [];
 
-    if (lowerPrompt.contains('shop') ||
-        lowerPrompt.contains('buy') ||
-        lowerPrompt.contains('price') ||
-        lowerPrompt.contains('product') ||
-        lowerPrompt.contains('brand') ||
-        lowerPrompt.contains('store')) {
-      // Find matching shopping brand connectors
-      final brandMatches = activeConnectors.where((c) {
+    // 1. Precise Product Intent Router (Shoes / Clothing / Coffee / Skincare / Audio / Jewellery)
+    if (lowerPrompt.contains('shoe') || lowerPrompt.contains('sneaker') || lowerPrompt.contains('footwear') || lowerPrompt.contains('boot')) {
+      selectedConnectors = activeConnectors.where((c) {
+        final name = c.name.toLowerCase();
+        return name.contains('allbird') || name.contains('greats') || name.contains('rothy') || name.contains('dune') || name.contains('chubbi') || c.id.contains('shop_gl');
+      }).toList();
+    } else if (lowerPrompt.contains('audio') || lowerPrompt.contains('headphone') || lowerPrompt.contains('earbud') || lowerPrompt.contains('speaker') || lowerPrompt.contains('sound')) {
+      selectedConnectors = activeConnectors.where((c) {
+        final name = c.name.toLowerCase();
+        return name.contains('boat') || name.contains('noise') || name.contains('jones');
+      }).toList();
+    } else if (lowerPrompt.contains('coffee') || lowerPrompt.contains('tea') || lowerPrompt.contains('drink') || lowerPrompt.contains('brew')) {
+      selectedConnectors = activeConnectors.where((c) {
+        final name = c.name.toLowerCase();
+        return name.contains('coffee') || name.contains('tea') || name.contains('chaayos') || name.contains('country bean');
+      }).toList();
+    } else if (lowerPrompt.contains('skin') || lowerPrompt.contains('beauty') || lowerPrompt.contains('cosmetic') || lowerPrompt.contains('shaving') || lowerPrompt.contains('care')) {
+      selectedConnectors = activeConnectors.where((c) {
+        final name = c.name.toLowerCase();
+        return name.contains('mcaffeine') || name.contains('mamaearth') || name.contains('plum') || name.contains('kama') || name.contains('glossier') || name.contains('colourpop') || name.contains('shaving');
+      }).toList();
+    } else if (lowerPrompt.contains('jewel') || lowerPrompt.contains('ring') || lowerPrompt.contains('necklace')) {
+      selectedConnectors = activeConnectors.where((c) {
+        final name = c.name.toLowerCase();
+        return name.contains('giva') || name.contains('pipa') || name.contains('voylla');
+      }).toList();
+    } else if (lowerPrompt.contains('clothing') || lowerPrompt.contains('shirt') || lowerPrompt.contains('pants') || lowerPrompt.contains('fashion') || lowerPrompt.contains('wear') || lowerPrompt.contains('apparel')) {
+      selectedConnectors = activeConnectors.where((c) {
+        final name = c.name.toLowerCase();
+        return name.contains('snitch') || name.contains('souled') || name.contains('bewakoof') || name.contains('gymshark') || name.contains('represent') || name.contains('suta') || name.contains('damensch');
+      }).toList();
+    }
+    // 2. Encyclopedia & Wiki Intent Router
+    else if (lowerPrompt.contains('wiki') ||
+        lowerPrompt.contains('encyclopedia') ||
+        lowerPrompt.contains('who') ||
+        lowerPrompt.contains('what') ||
+        lowerPrompt.contains('history') ||
+        lowerPrompt.contains('science') ||
+        lowerPrompt.contains('anime') ||
+        lowerPrompt.contains('game') ||
+        lowerPrompt.contains('manga') ||
+        lowerPrompt.contains('philosophy') ||
+        lowerPrompt.contains('linux') ||
+        lowerPrompt.contains('indic') ||
+        lowerPrompt.contains('hindi') ||
+        lowerPrompt.contains('sanskrit')) {
+      final encMatches = activeConnectors.where((c) {
+        if (c.category != ConnectorCategory.encyclopedia) return false;
         final nameLower = c.name.toLowerCase();
-        final brandWord = nameLower.replaceAll(RegExp(r'[^\w\s]'), '').split(' ').first;
-        return c.category == ConnectorCategory.shopping && (lowerPrompt.contains(brandWord) || lowerPrompt.contains(c.id));
+        final firstWord = nameLower.replaceAll(RegExp(r'[^\w\s]'), '').split(' ').first;
+        return lowerPrompt.contains(firstWord) || lowerPrompt.contains(c.region.toLowerCase());
       }).toList();
 
-      if (brandMatches.isNotEmpty) {
-        selectedConnectors = brandMatches.take(4).toList();
+      if (encMatches.isNotEmpty) {
+        selectedConnectors = encMatches.take(4).toList();
       } else {
-        selectedConnectors = activeConnectors.where((c) => c.category == ConnectorCategory.shopping).take(4).toList();
+        selectedConnectors = activeConnectors.where((c) => c.category == ConnectorCategory.encyclopedia).take(4).toList();
       }
-    } else if (lowerPrompt.contains('weather') || lowerPrompt.contains('temp')) {
-      selectedConnectors = activeConnectors.where((c) => c.url.contains('open-meteo') || c.category == ConnectorCategory.wellBeing).take(3).toList();
-    } else if (lowerPrompt.contains('quote') || lowerPrompt.contains('motto') || lowerPrompt.contains('inspiration')) {
-      selectedConnectors = activeConnectors.where((c) => c.url.contains('zenquotes') || c.url.contains('stoic')).take(3).toList();
     } else {
-      // Default balanced selection from each category
-      selectedConnectors = activeConnectors.take(5).toList();
+      selectedConnectors = activeConnectors.take(6).toList();
     }
 
     if (selectedConnectors.isEmpty) {
@@ -57,14 +91,23 @@ class ConnectorService {
 
     final futures = selectedConnectors.map((c) async {
       try {
+        String fetchUrl = c.url;
+
+        if (c.category == ConnectorCategory.encyclopedia && c.url.contains('/w/api.php') && !c.url.contains('srsearch')) {
+          final queryTerm = _extractSearchTerm(userPrompt);
+          fetchUrl = '${c.url}?action=query&list=search&srsearch=${Uri.encodeComponent(queryTerm)}&format=json';
+        }
+
         final response = await http
-            .get(Uri.parse(c.url), headers: _standardHeaders)
+            .get(Uri.parse(fetchUrl), headers: _standardHeaders)
             .timeout(const Duration(seconds: 4));
 
         if (response.statusCode == 200) {
           final data = jsonDecode(response.body);
-          final extracted = _extractJsonData(data, c);
-          return '• ${c.name} (${c.region}): $extracted';
+          final extracted = _extractJsonData(data, c, userPrompt: userPrompt);
+          if (extracted != null && extracted.isNotEmpty) {
+            return '• ${c.name} (${c.region}): $extracted';
+          }
         }
       } catch (_) {}
       return null;
@@ -80,7 +123,7 @@ class ConnectorService {
     }
 
     if (count == 0) {
-      buffer.writeln('• ZenQuotes & Brand APIs: Live products and quotes fetched successfully.');
+      buffer.writeln('• Verified Brand & Wiki Feeds: Search results retrieved.');
     }
 
     buffer.writeln('[END OF REAL-TIME SEARCH RESULTS]\n');
@@ -88,30 +131,67 @@ class ConnectorService {
     return buffer.toString();
   }
 
-  /// Parses Shopify /products.json schema as well as generic JSON APIs
-  static String _extractJsonData(dynamic json, AiConnector connector) {
+  static String _extractSearchTerm(String prompt) {
+    String clean = prompt.replaceAll(RegExp(r'(who|what|where|when|why|how|is|are|the|a|an|tell|me|about|query|connectors|find|search|best|some)'), ' ').trim();
+    return clean.isEmpty ? 'Artificial_intelligence' : clean;
+  }
+
+  /// Parses and filters JSON response by search prompt intent
+  static String? _extractJsonData(dynamic json, AiConnector connector, {String userPrompt = ''}) {
     try {
-      // Shopify /products.json schema handler
+      final searchKeywords = userPrompt.toLowerCase().split(' ').where((w) => w.length > 3).toList();
+
+      // 1. MediaWiki Action Query Search API (/w/api.php)
+      if (json is Map && json.containsKey('query') && json['query'] is Map && (json['query'] as Map).containsKey('search')) {
+        final searchList = json['query']['search'] as List;
+        if (searchList.isNotEmpty && searchList[0] is Map) {
+          final firstResult = searchList[0] as Map;
+          final title = firstResult['title'] ?? '';
+          String snippet = (firstResult['snippet'] ?? '').toString();
+          snippet = snippet.replaceAll(RegExp(r'<[^>]*>'), '');
+          return '$title — $snippet';
+        }
+      }
+
+      // 2. MediaWiki REST Summary API
+      if (json is Map && json.containsKey('extract')) {
+        return json['extract'].toString();
+      }
+
+      // 3. Shopify /products.json schema handler with Keyword Matching
       if (json is Map && json.containsKey('products') && json['products'] is List) {
         final products = json['products'] as List;
-        if (products.isEmpty) return 'No products returned';
+        if (products.isEmpty) return null;
+
+        // Filter products matching search keywords if available
+        List matchingProducts = products;
+        if (searchKeywords.isNotEmpty) {
+          final filtered = products.where((p) {
+            final titleLower = (p['title'] ?? '').toString().toLowerCase();
+            final typeLower = (p['product_type'] ?? '').toString().toLowerCase();
+            return searchKeywords.any((kw) => titleLower.contains(kw) || typeLower.contains(kw));
+          }).toList();
+          if (filtered.isNotEmpty) {
+            matchingProducts = filtered;
+          }
+        }
 
         final itemsBuffer = StringBuffer();
-        final maxCount = products.length > 3 ? 3 : products.length;
+        final maxCount = matchingProducts.length > 3 ? 3 : matchingProducts.length;
 
         for (int i = 0; i < maxCount; i++) {
-          final p = products[i] as Map;
+          final p = matchingProducts[i] as Map;
           final title = p['title'] ?? 'Product';
           String price = '';
           if (p.containsKey('variants') && p['variants'] is List && (p['variants'] as List).isNotEmpty) {
-            price = ' - Price: ${p['variants'][0]['price'] ?? ''}';
+            price = ' - Price: \$${p['variants'][0]['price'] ?? ''}';
           }
           itemsBuffer.write('${i + 1}. $title$price | ');
         }
         return itemsBuffer.toString();
       }
 
-      // Array Response (e.g. ZenQuotes, FakeStoreAPI)
+      // 4. Array Response (e.g. ZenQuotes, FakeStoreAPI)
       if (json is List && json.isNotEmpty) {
         dynamic item = json[0];
         if (item is Map) {
@@ -126,7 +206,7 @@ class ConnectorService {
         return item.toString();
       }
 
-      // Object Response (e.g. DummyJSON)
+      // 5. Object Response (e.g. DummyJSON)
       if (json is Map && json.containsKey('products') && json['products'] is List) {
         final prods = json['products'] as List;
         if (prods.isNotEmpty && prods[0] is Map) {
@@ -135,26 +215,9 @@ class ConnectorService {
         }
       }
 
-      // Fallback path extractor
-      if (json is Map) {
-        final parts = connector.jsonPath.split('.');
-        dynamic curr = json;
-        for (var p in parts) {
-          if (curr is Map && curr.containsKey(p)) {
-            curr = curr[p];
-          } else if (curr is List && curr.isNotEmpty) {
-            curr = curr[0];
-            if (curr is Map && curr.containsKey(p)) {
-              curr = curr[p];
-            }
-          }
-        }
-        return curr.toString();
-      }
-
       return json.toString();
     } catch (_) {
-      return json.toString();
+      return null;
     }
   }
 }

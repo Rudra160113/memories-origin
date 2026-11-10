@@ -73,7 +73,7 @@ class LlamaNativeService {
     return cleaned.trim();
   }
 
-  /// Executes live GGUF text generation via Llama.cpp with pre-fetched Shopify/Brand JSON Connector context
+  /// Executes live GGUF text generation via Llama.cpp with precise product/intent RAG context
   static Future<String?> runLocalInference({
     required String prompt,
     String noteTitle = '',
@@ -104,7 +104,7 @@ class LlamaNativeService {
       contextStr.writeln('Active User Note Content:\n"$noteContent"\n');
     }
 
-    // Always fetch active connector JSON results (including Shopify /products.json brand search)
+    // Always fetch active connector JSON results matched with intent
     if (connectors != null && connectors.isNotEmpty) {
       final connectorData = await ConnectorService.fetchActiveConnectorContext(connectors, userPrompt: prompt);
       if (connectorData.isNotEmpty) {
@@ -113,7 +113,7 @@ class LlamaNativeService {
     }
 
     final formattedPrompt =
-        '<start_of_turn>user\nSystem: You are Ai⁺ by Origin. The real-time brand & academic JSON connectors have ALREADY searched live sources and provided retrieved product/quote data below. Summarize, present, and explain these retrieved insights directly for the user using emojis like 👋, ✨, 🌸, 💡, 💖.\n${contextStr.toString()}\nUser Request: $prompt<end_of_turn>\n<start_of_turn>model\n';
+        '<start_of_turn>user\nSystem: You are Ai⁺ by Origin. The real-time brand & academic JSON connectors have searched live sources and provided retrieved data below. Accurately report the retrieved items (do not mislabel headphones or smartwatches as shoes). Summarize and explain these retrieved insights using emojis like 👋, ✨, 🌸, 💡, 💖.\n${contextStr.toString()}\nUser Request: $prompt<end_of_turn>\n<start_of_turn>model\n';
 
     try {
       final result = await Process.run(
